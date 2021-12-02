@@ -1,4 +1,9 @@
+const MutationParams = require("./MutationParams");
+const CellKinds = require("../Cell/CellKinds");
 const CellStates = require("../Cell/CellStates");
+const Directions = require("../Directions");
+const Chromosome = require("./Chromosome");
+
 /**
  * Concept for static gene data structures.
  * The core idea is that each Genome is a static, immutable data structure.
@@ -11,13 +16,13 @@ const CellStates = require("../Cell/CellStates");
  *  - More extensible - inspired by ECS principles (Entity Component System)
  */
 
-/** This determines which Gene Interface to use. Helps with deserialization.
- */
-const Chromosome = {
-    base: 'base',  // Just the default state
-    body: 'body',  // Determines anatomy
-    brain: 'brain', // Determines behavior
-    gamete: 'gamete', // Determines reproduction
+
+class Loc {
+    constructor(col, row) {
+        this.col = col;
+        this.row = row;
+    }
+
 }
 
 class Gene {
@@ -42,70 +47,6 @@ class Gene {
     }
 }
 
-class MutabilityGene extends Gene {
-    /** A gene which expresses
-     * @param mutability - relative mutation rate
-     * @param priority
-     */
-    constructor(mutability = 5, priority = 0) {
-        super(Chromosome.gamete, priority);
-        this.mutability = mutability;
-    }
-}
 
-class BodyGene extends Gene {
-    /** Gene for a somatic cell
-     * @param {CellStates} state - Cell type
-     * @param {int} col - Local column of cell relative to center
-     * @param {int} row - Local row of cell
-     * @param {int} priority
-     */
-    constructor(state, col, row, priority = 0) {
-        super(Chromosome.body, priority);
-        this.state = state;
-        this.col = col;
-        this.row = row;
-    }
-
-    mutated(mutationParams) {
-        var new_gene = this.copy();
-        // modify the state/row/col as determined by mutationParams
-        // Basically this is where you would determine how to modify the various parameters
-        // I would just copy this logic from inherit/reproduce
-        return new_gene
-    }
-}
-
-class Genome {
-    /** A collection of genes. This uses the "collection of objects" pattern.
-     * All genes, regardless of type, are in this array. This makes expressing,
-     * copying, mapping, filtering, adding, subtracting, and mutating a genome easy.
-     * @param {Array.<Gene>} genes
-     */
-    constructor(genes) {
-        this.genes = genes;
-        // this could also just be the hash of `genes`
-        this.name = '_' + Math.random().toString(36).substr(2, 9);
-
-    }
-
-}
-
-/** Create the genome of the original organism.
- * @returns {Genome}
- */
-Genome.original = () => {
-    return new Genome([
-        new BodyGene(CellStates.mouth, 0, 0),
-        new BodyGene(CellStates.producer, 1, 1),
-        new BodyGene(CellStates.producer, -1, -1),
-        new MutabilityGene(),
-    ]);
-}
-
-module.exports = {
-    Chromosome: Chromosome,
-    Gene: Gene,
-    Genome: Genome,
-}
+module.exports = Gene;
 

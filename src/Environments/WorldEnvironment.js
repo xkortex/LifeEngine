@@ -7,6 +7,7 @@ const EnvironmentController = require('../Controllers/EnvironmentController');
 const Hyperparams = require('../Hyperparameters.js');
 const FossilRecord = require('../Stats/FossilRecord');
 const Gene = require('../Organism/Genome/Gene');
+const Genome = require('../Organism/Genome/Genome');
 
 class WorldEnvironment extends Environment{
     constructor(cell_size) {
@@ -77,6 +78,8 @@ class WorldEnvironment extends Environment{
         org.anatomy.addDefaultCell(CellStates.producer, -1, -1);
         this.addOrganism(org);
         FossilRecord.addSpecies(org, null);
+        var original_genome = Genome.original();
+        console.log(JSON.stringify(original_genome));
     }
 
     addOrganism(organism) {
