@@ -1,4 +1,4 @@
-const CellStates = require("../CellStates");
+const CellStates = require("../Cell/CellStates");
 /**
  * Concept for static gene data structures.
  * The core idea is that each Genome is a static, immutable data structure.
@@ -25,7 +25,7 @@ class Gene {
      * @param {Chromosome} chromosome - Determines class of gene
      * @param {int} priority - Determines priority of redundant genes. Map/reduce to get the "dominant" gene.
      */
-    constructor(chromosome = base,   priority = 0) {
+    constructor(chromosome = base, priority = 0) {
         this.chromosome = chromosome;
         this.priority = priority;
     }
@@ -47,11 +47,12 @@ class MutabilityGene extends Gene {
      * @param mutability - relative mutation rate
      * @param priority
      */
-    constructor(mutability = 5, priority=0) {
+    constructor(mutability = 5, priority = 0) {
         super(Chromosome.gamete, priority);
         this.mutability = mutability;
     }
 }
+
 class BodyGene extends Gene {
     /** Gene for a somatic cell
      * @param {CellStates} state - Cell type
@@ -59,7 +60,7 @@ class BodyGene extends Gene {
      * @param {int} row - Local row of cell
      * @param {int} priority
      */
-    constructor(state, col, row, priority=0) {
+    constructor(state, col, row, priority = 0) {
         super(Chromosome.body, priority);
         this.state = state;
         this.col = col;
@@ -82,7 +83,7 @@ class Genome {
      * @param {Array.<Gene>} genes
      */
     constructor(genes) {
-        self.genes = genes
+        this.genes = genes;
         // this could also just be the hash of `genes`
         this.name = '_' + Math.random().toString(36).substr(2, 9);
 
@@ -95,12 +96,16 @@ class Genome {
  */
 Genome.original = () => {
     return new Genome([
-        new BodyGene(CellStates.mouth, 0, 0 ),
+        new BodyGene(CellStates.mouth, 0, 0),
         new BodyGene(CellStates.producer, 1, 1),
         new BodyGene(CellStates.producer, -1, -1),
         new MutabilityGene(),
     ]);
 }
 
-
+module.exports = {
+    Chromosome: Chromosome,
+    Gene: Gene,
+    Genome: Genome,
+}
 

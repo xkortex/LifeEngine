@@ -6,6 +6,7 @@ const CellStates = require('../Organism/Cell/CellStates');
 const EnvironmentController = require('../Controllers/EnvironmentController');
 const Hyperparams = require('../Hyperparameters.js');
 const FossilRecord = require('../Stats/FossilRecord');
+const Gene = require('../Organism/Genome/Gene');
 
 class WorldEnvironment extends Environment{
     constructor(cell_size) {
